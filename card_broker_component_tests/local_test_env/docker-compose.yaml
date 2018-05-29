@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  db:
+    image: mhhoban/dukedoms_rdbs
+    environment:
+      POSTGRES_PASSWORD: daleria
+    ports:
+      - 5432:5432
+  mock-card-service:
+    image: mhhoban/dukedoms_mock_card_service
+    ports:
+      - 5005:5005
