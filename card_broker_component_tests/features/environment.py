@@ -21,7 +21,7 @@ def before_scenario(context, step):
 
 
     context.clients = Dict()
-    context.clients.card_service = SwaggerClient.from_spec(
+    context.clients.card_broker = SwaggerClient.from_spec(
         load_file(
             'specs/dukedoms_card_broker_api.yaml',
         ),

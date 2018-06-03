@@ -6,17 +6,21 @@ Feature: Card Broker
     When card broker receives request to create new game with data:
       | game id | player ids |
       | 1337    | 1,3        |
-    Then the request is successful
+    Then the request returns 200
     When card broker receives request for game state for game id "1337"
-    Then card broker returns a game state
-    When card broker receives request for card state for player
-      | game id | player id |
-      | 1337    | 1         |
-    Then card broker returns a beginning player card state
+    Then card broker returns expected game state:
+      | card id | supply | finite |
+
+    When card broker receives request for card state for player "1"
+    Then card broker returns player card state:
+      | deck size | hand size | discard size |
+      | 5         | 5         | 0
     When card broker receives request for card state for player
       | game id | player id |
       | 1337    | 3         |
-    Then card broker returns a beginning player card state
+    Then card broker returns player card state:
+      | deck size | hand size | discard size |
+      | 5         | 5         | 0
 
   Scenario: Player Acquires Card
     Given an empty card broker database
