@@ -14,9 +14,9 @@ def before_scenario(context, step):
     }
 
     context.urls = Dict()
-    context.urls.card_broker = 'http://card-broker:8080'
+    context.urls.card_broker = 'http://127.0.0.1:5006'
     context.urls.card_broker_db = (
-        'postgresql+psycopg2://postgres:daleria@dukedoms-rdbs:5432/card_broker'
+        'postgresql+psycopg2://postgres:daleria@127.0.0.1:5432/card_broker'
     )
 
 
