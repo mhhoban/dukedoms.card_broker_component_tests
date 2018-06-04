@@ -25,8 +25,8 @@ pipeline {
       withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub-auth',
                     usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
         sh 'docker login -u $USERNAME -p $PASSWORD && \
-          docker push mhhoban/dukedoms_card_broker_tests:latest && \
-          docker push mhhoban/dukedoms_card_broker_tests:$GIT_COMMIT'
+          docker push mhhoban/dukedoms-card-broker-tests:latest && \
+          docker push mhhoban/dukedoms-card-broker-tests:$GIT_COMMIT'
 
       }
     }
