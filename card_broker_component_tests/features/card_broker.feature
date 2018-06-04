@@ -1,6 +1,5 @@
 @card_broker
 Feature: Card Broker
-
   Scenario: Create New Game
     Given an empty card broker database
     When card broker receives request to create new game with data:
@@ -14,13 +13,11 @@ Feature: Card Broker
     When card broker receives request for card state for player "1"
     Then card broker returns player card state:
       | deck size | hand size | discard size |
-      | 5         | 5         | 0
-    When card broker receives request for card state for player
-      | game id | player id |
-      | 1337    | 3         |
+      | 0         | 0         | 0            |
+    When card broker receives request for card state for player "3"
     Then card broker returns player card state:
       | deck size | hand size | discard size |
-      | 5         | 5         | 0
+      | 0         | 0         | 0            |
 
   Scenario: Player Acquires Card
     Given an empty card broker database
