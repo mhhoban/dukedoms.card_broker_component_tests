@@ -13,11 +13,11 @@ Feature: Card Broker
     When card broker receives request for card state for player "1"
     Then card broker returns player card state:
       | deck size | hand size | discard size |
-      | 0         | 0         | 0            |
+      | 5         | 5         | 0            |
     When card broker receives request for card state for player "3"
     Then card broker returns player card state:
       | deck size | hand size | discard size |
-      | 0         | 0         | 0            |
+      | 5         | 5         | 0            |
 
   Scenario: Player Acquires Card
     Given an empty card broker database
