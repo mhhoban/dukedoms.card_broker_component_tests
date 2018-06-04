@@ -16,8 +16,8 @@ pipeline {
     stage('Build Docker Image') {
       steps {
         sh './build_docker_image.sh'
-        sh 'docker tag mhhoban/dukedoms_card_broker_tests:latest \
-          mhhoban/dukedoms_card_broker_tests:$GIT_COMMIT '
+        sh 'docker tag mhhoban/dukedoms-card-broker-tests:latest \
+          mhhoban/dukedoms-card-broker-tests:$GIT_COMMIT '
       }
     }
     stage('Publish Image to DockerHub') {
