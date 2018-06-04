@@ -19,6 +19,7 @@ Feature: Card Broker
       | deck size | hand size | discard size |
       | 5         | 5         | 0            |
 
+  @wip
   Scenario: Player Acquires Card
     Given an empty card broker database
     And a new game with data:
@@ -31,6 +32,7 @@ Feature: Card Broker
       | player id | card id |
       | 1         | 2       |
 
+  @wip
   Scenario: Player Draws Card and Discard Card
     Given an empty card broker database
     And a new game with data:
@@ -43,6 +45,7 @@ Feature: Card Broker
       | 3         | 1         |
     Then player "3" discards card
 
+  @wip
   Scenario: Player Discards Hand Then Draws New Hand
     Given an empty card broker database
     And a new game with data:
@@ -53,6 +56,7 @@ Feature: Card Broker
     When card broker receives request for player "3" to draw hand
     Then player "3" draws a new hand
 
+  @wip
   Scenario: Trash Player Card
     Given an empty card broker database
     And a new game with data:
@@ -65,6 +69,7 @@ Feature: Card Broker
       | player id | card slot |
       | 1         | 1         |
 
+  @wip
   Scenario: Get Card Supply
     Given an empty card broker database
     And a new game with data:
