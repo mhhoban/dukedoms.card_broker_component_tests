@@ -24,3 +24,15 @@ def assert_player_card_state(context):
     assert_that(
         len(context.player_state.discard), equal_to(int(context.table.rows[0]['discard size']))
     )
+
+@then('player has card on top of "{list}" pile')
+def assert_top_card(context, list):
+    """
+    asserts a given card is atop a given player's given card list
+    """
+    player_id = int(context.table.rows[0]['player id'])
+    card_id = int(context.table.rows[0]['card id'])
+
+    request_player_card_state(context, player_id)
+
+    assert_that(context.player_state[list][-1], equal_to(card_id))

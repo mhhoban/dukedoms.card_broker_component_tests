@@ -1,5 +1,7 @@
 @card_broker
 Feature: Card Broker
+
+  @foo
   Scenario: Create New Game
     Given an empty card broker database
     When card broker receives request to create new game with data:
@@ -19,18 +21,21 @@ Feature: Card Broker
       | deck size | hand size | discard size |
       | 5         | 5         | 0            |
 
-  @wip
+  @foo
   Scenario: Player Acquires Card
     Given an empty card broker database
     And a new game with data:
       | game id | player ids |
       | 1337    | 1,3        |
     When card broker receives request for player card acquisition:
+      | game id | player id | card id |
+      | 1337    | 1         | 4       |
+    Then player has card on top of "discard" pile:
       | player id | card id |
-      | 1         | 2       |
-    Then player has card on top of discard pile
-      | player id | card id |
-      | 1         | 2       |
+      | 1         | 4       |
+    And game deck has size:
+      | game id| card id | deck size    |
+      | 1337   | 4       | 7            |
 
   @wip
   Scenario: Player Draws Card and Discard Card

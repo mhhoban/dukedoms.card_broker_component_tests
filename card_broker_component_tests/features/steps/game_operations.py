@@ -1,6 +1,7 @@
 from behave import given, then, when
 from hamcrest import assert_that, equal_to, has_item
 
+@given('a new game with data')
 @when('card broker receives request to create new game with data')
 def create_new_game(context):
     """
@@ -51,3 +52,15 @@ def assert_ok_response(context):
     verify a 200 was returned by request
     """
     assert_that(context.result, equal_to(200))
+
+
+@then('game deck has size')
+def assert_game_deck_size(context):
+    """
+    verify game deck is of a given size
+    """
+    game_id = int(context.table.rows[0]['game id'])
+    deck_size = int(context.table.rows[0]['deck size'])
+    card_id = int(context.table.rows[0]['card id'])
+    request_game_state(context, game_id)
+    assert_that(context.game_state[str(card_id)]['supply'], equal_to(deck_size)) 
