@@ -1,17 +1,15 @@
 @card_broker
 Feature: Card Broker
+Background: New Game
+  Given an empty card broker database
+  and a new game with data:
+    | game id | player ids |
+    | 1337    | 1,3        |
 
-  @foo
   Scenario: Create New Game
-    Given an empty card broker database
-    When card broker receives request to create new game with data:
-      | game id | player ids |
-      | 1337    | 1,3        |
-    Then the request returns 200
     When card broker receives request for game state for game id "1337"
     Then card broker returns expected game state:
       | card id | supply | finite |
-
     When card broker receives request for card state for player "1"
     Then card broker returns player card state:
       | deck size | hand size | discard size |
@@ -21,12 +19,7 @@ Feature: Card Broker
       | deck size | hand size | discard size |
       | 5         | 5         | 0            |
 
-  @foo
   Scenario: Player Acquires Card
-    Given an empty card broker database
-    And a new game with data:
-      | game id | player ids |
-      | 1337    | 1,3        |
     When card broker receives request for player card acquisition:
       | game id | player id | card id |
       | 1337    | 1         | 4       |
@@ -37,14 +30,12 @@ Feature: Card Broker
       | game id| card id | deck size    |
       | 1337   | 4       | 7            |
 
-  @wip
-  Scenario: Player Draws Card and Discard Card
-    Given an empty card broker database
-    And a new game with data:
-      | game id | player ids |
-      | 1337    | 1,3        |
+  Scenario: Player Draws Card
     When card broker receives request for player "3" to draw a card
     Then player "3" successfully draws a card
+
+  @wip
+  Scenario: Player Discards Card
     When card broker receives request for player discard:
       | player id | card slot |
       | 3         | 1         |
@@ -52,10 +43,6 @@ Feature: Card Broker
 
   @wip
   Scenario: Player Discards Hand Then Draws New Hand
-    Given an empty card broker database
-    And a new game with data:
-      | game id | player ids |
-      | 1337    | 1,3        |
     When card broker receives request for player "3" to discard hand
     Then player "3" discards hand
     When card broker receives request for player "3" to draw hand
@@ -63,10 +50,6 @@ Feature: Card Broker
 
   @wip
   Scenario: Trash Player Card
-    Given an empty card broker database
-    And a new game with data:
-      | game id | player ids |
-      | 1337    | 1,3        |
     When card broker receives request for player to trash card:
       | player id | card slot |
       | 1         | 1         |
@@ -77,8 +60,5 @@ Feature: Card Broker
   @wip
   Scenario: Get Card Supply
     Given an empty card broker database
-    And a new game with data:
-      | game id | player ids |
-      | 1337    | 1,3        |
     When card broker receives request for game state for game "1337"
     Then card broker returns the expected game state

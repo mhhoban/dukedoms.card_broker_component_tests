@@ -1,6 +1,7 @@
 from behave import given, then, when
 from hamcrest import assert_that, equal_to, has_item
 
+from player_operations import request_player_card_state
 @when('card broker receives request for player card acquisition')
 def acquire_card_request(context):
     """
@@ -19,3 +20,26 @@ def acquire_card_request(context):
     ).result()
 
     assert_that(result.status_code, equal_to(200))
+
+@when('card broker receives request for player "{player_id}" to draw a card')
+def draw_card_request(context, player_id):
+    """
+    send request for player to draw a card from deck
+    """
+    player_id = int(player_id)
+    request_player_card_state(context, player_id)
+    context.pre_draw_hand_len = len(context.player_state.hand)
+    context.pre_draw_deck_size = len(context.player_state.deck)
+    _, result= context.clients.card_broker.cardOperations.draw_player_card(
+        playerId=int(player_id)
+    ).result()
+    assert_that(result.status_code, equal_to(200))
+
+@then('player "{player_id}" successfully draws a card')
+def assert_card_drawn(context, player_id):
+    """
+    update player state, check that hand has grown by one
+    """
+    request_player_card_state(context, int(player_id))
+    assert_that(len(context.player_state.hand), equal_to(context.pre_draw_hand_len + 1))
+    assert_that(len(context.player_state.deck), equal_to(context.pre_draw_deck_size - 1))
