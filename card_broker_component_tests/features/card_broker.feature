@@ -34,7 +34,6 @@ Background: New Game
     When card broker receives request for player "3" to draw a card
     Then player "3" successfully draws a card
 
-  @wip
   Scenario: Player Discards Card
     When card broker receives request for player discard:
       | player id | card slot |

@@ -43,3 +43,31 @@ def assert_card_drawn(context, player_id):
     request_player_card_state(context, int(player_id))
     assert_that(len(context.player_state.hand), equal_to(context.pre_draw_hand_len + 1))
     assert_that(len(context.player_state.deck), equal_to(context.pre_draw_deck_size - 1))
+
+@when('card broker receives request for player discard')
+def send_player_discard_request(context):
+    """
+    sends request for player to discard card
+    """
+    player_id = int(context.table.rows[0]['player id'])
+    card_slot = int(context.table.rows[0]['card slot'])
+
+    request_player_card_state(context, int(player_id))
+    context.pre_discard_hand_len = len(context.player_state.hand)
+    context.pre_discard_discard_len = len(context.player_state.discard)
+    _, result= context.clients.card_broker.cardOperations.discard_player_card(
+        discardCardRequest={
+            'playerId': player_id,
+            'cardSlotId': int(card_slot)
+        }
+    ).result()
+    assert_that(result.status_code, equal_to(200))
+
+@then('player "{player_id}" discards card')
+def assert_player_discard(context, player_id):
+    """
+    asserts that discard card action did occur
+    """
+    request_player_card_state(context, int(player_id))
+    assert_that(len(context.player_state.hand), equal_to(context.pre_discard_hand_len - 1))
+    assert_that(len(context.player_state.discard), equal_to(context.pre_discard_discard_len + 1))
