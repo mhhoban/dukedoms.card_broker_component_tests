@@ -1,6 +1,7 @@
 from behave import given, then, when
 from hamcrest import assert_that, equal_to, has_item
 
+from game_operations import request_game_state
 from player_operations import request_player_card_state
 @when('card broker receives request for player card acquisition')
 def acquire_card_request(context):
@@ -51,6 +52,8 @@ def send_player_discard_request(context):
     """
     player_id = int(context.table.rows[0]['player id'])
     card_slot = int(context.table.rows[0]['card slot'])
+    game_id = int(context.table.rows[0]['game id'])
+
 
     request_player_card_state(context, int(player_id))
     context.pre_discard_hand_len = len(context.player_state.hand)
@@ -139,3 +142,43 @@ def assert_player_hand_empty(context, player_id):
         len(context.player_state.hand),
         equal_to(context.pre_draw_hand_len + 5)
     )
+
+@when('card broker receives request for player to trash card')
+def request_player_trash_card(context):
+    """
+    sends request for player to trash card
+    """
+    player_id = int(context.table.rows[0]['player id'])
+    card_slot = int(context.table.rows[0]['card slot'])
+    game_id = int(context.table.rows[0]['game id'])
+
+
+    request_player_card_state(context, int(player_id))
+    context.pre_trash_hand = context.player_state.hand[:]
+
+    _, result= context.clients.card_broker.cardOperations.trash_player_card(
+        trashCardRequest={
+            'playerId': player_id,
+            'cardSlotId': card_slot,
+            'gameId': game_id
+        }
+    ).result()
+    assert_that(result.status_code, equal_to(200))
+
+@then('card broker trashes player card')
+def assert_player_card_trashed(context):
+    """
+    asserts that card in question was actually trashed
+    """
+    player_id = int(context.table.rows[0]['player id'])
+    card_slot = int(context.table.rows[0]['card slot'])
+    game_id = int(context.table.rows[0]['game id'])
+
+
+    request_player_card_state(context, player_id)
+    trash, result = context.clients.card_broker.gameInfo.get_game_trash(
+        gameId=game_id
+    ).result()
+
+    assert_that(len(context.player_state.hand), equal_to(len(context.pre_trash_hand) - 1))
+    assert_that(trash['trash'][0], equal_to(context.pre_trash_hand[card_slot]))

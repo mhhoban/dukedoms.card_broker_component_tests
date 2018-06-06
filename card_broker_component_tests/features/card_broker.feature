@@ -36,8 +36,8 @@ Background: New Game
 
   Scenario: Player Discards Card
     When card broker receives request for player discard:
-      | player id | card slot |
-      | 3         | 1         |
+      | player id | card slot | game id |
+      | 3         | 1         | 1337    |
     Then player "3" discards card
 
   Scenario: Player Curses
@@ -55,14 +55,13 @@ Background: New Game
     When card broker receives request for player "3" to draw hand
     Then player "3" draws a new hand
 
-  @wip
   Scenario: Trash Player Card
     When card broker receives request for player to trash card:
-      | player id | card slot |
-      | 1         | 1         |
+      | player id | card slot | game id |
+      | 1         | 1         | 1337    |
     Then card broker trashes player card:
-      | player id | card slot |
-      | 1         | 1         |
+      | player id | card slot | game id |
+      | 1         | 1         | 1337    |
 
   @wip
   Scenario: Get Card Supply
