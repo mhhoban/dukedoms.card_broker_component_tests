@@ -96,3 +96,46 @@ def assert_players_have_curses(context):
     for id in player_ids:
         request_player_card_state(context, int(id))
         assert_that(context.player_state.discard[-1], equal_to(CURSE_ID))
+
+@when('card broker receives request for player "{player_id}" to discard hand')
+def send_discard_hand_request(context, player_id):
+    """
+    sends request for player of player_id to discard hand
+    """
+    _, result = context.clients.card_broker.cardOperations.discard_player_hand(
+        playerId=int(player_id)
+    ).result()
+    assert_that(result.status_code, equal_to(200))
+
+@then('player "{player_id}" discards hand')
+def assert_player_hand_empty(context, player_id):
+    """
+    asserts that player's hand is empty
+    """
+    request_player_card_state(context, int(player_id))
+    assert_that(len(context.player_state.hand), equal_to(0))
+
+@when('card broker receives request for player "{player_id}" to draw hand')
+def send_draw_hand_request(context, player_id):
+    """
+    sends request for player of player_id to draw new hand
+    """
+    player_id = int(player_id)
+    request_player_card_state(context, player_id)
+    context.pre_draw_hand_len = len(context.player_state.hand)
+
+    _, result = context.clients.card_broker.cardOperations.draw_player_hand(
+        playerId=player_id
+    ).result()
+    assert_that(result.status_code, equal_to(200))
+
+@then('player "{player_id}" draws a new hand')
+def assert_player_hand_empty(context, player_id):
+    """
+    asserts that player's hand is empty
+    """
+    request_player_card_state(context, int(player_id))
+    assert_that(
+        len(context.player_state.hand),
+        equal_to(context.pre_draw_hand_len + 5)
+    )
