@@ -71,3 +71,26 @@ def assert_player_discard(context, player_id):
     request_player_card_state(context, int(player_id))
     assert_that(len(context.player_state.hand), equal_to(context.pre_discard_hand_len - 1))
     assert_that(len(context.player_state.discard), equal_to(context.pre_discard_discard_len + 1))
+
+@when('card broker receives request to curse players with data')
+def request_player_curse(context):
+    """
+    sends request to card broker to distribute curse cards
+    """
+    _, result = context.clients.card_broker.cardOperations.curse_players(
+        gameId=int(context.table.rows[0]['game id']),
+        playerId=int(context.table.rows[0]['player id'])
+    ).result()
+
+    assert_that(result.status_code, equal_to(200))
+
+@then('players gained curse card')
+def assert_players_have_curses(context):
+    """
+    asserts that given list of players have curses at top of discard pile
+    """
+    player_ids = context.table.rows[0]['player ids'].split(',')
+    CURSE_ID = 666
+    for id in player_ids:
+        request_player_card_state(context, int(id))
+        assert_that(context.player_state.discard[-1], equal_to(CURSE_ID))
