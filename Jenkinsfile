@@ -21,6 +21,7 @@ pipeline {
       }
     }
     stage('Publish Image to DockerHub') {
+      when { branch 'master' }
       steps {
       withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub-auth',
                     usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
