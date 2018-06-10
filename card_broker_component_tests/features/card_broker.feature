@@ -55,6 +55,7 @@ Background: New Game
     When card broker receives request for player "3" to draw hand
     Then player "3" draws a new hand
 
+  @wip
   Scenario: Trash Player Card
     When card broker receives request for player to trash card:
       | player id | card slot | game id |
