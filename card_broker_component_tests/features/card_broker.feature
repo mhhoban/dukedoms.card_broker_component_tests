@@ -40,6 +40,14 @@ Background: New Game
       | 3         | 1         |
     Then player "3" discards card
 
+  Scenario: Player Curses
+    When card broker receives request to curse players with data:
+      | player id | game id |
+      | 1         | 1337    |
+    Then players have curse cards in discard:
+      | player ids |
+      | 3          |
+
   @wip
   Scenario: Player Discards Hand Then Draws New Hand
     When card broker receives request for player "3" to discard hand

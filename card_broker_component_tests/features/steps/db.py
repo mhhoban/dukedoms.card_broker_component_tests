@@ -14,6 +14,8 @@ def clear_card_broker_db(context):
 
     session.execute('TRUNCATE TABLE gamestate')
     session.execute('TRUNCATE TABLE playerstate')
+    session.execute('TRUNCATE TABLE gameinfo')
+
 
     session.commit()
     session.close()
